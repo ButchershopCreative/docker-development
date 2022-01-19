@@ -1,0 +1,27 @@
+version: "2.1"
+services:
+  nginx:
+    image: nginx:1.19.10.1
+    restart: always
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/log/:/var/log/:rw
+      - ./conf.d/default.conf:/etc/nginx/conf.d/default.conf:ro
+#      - ./configs/nginx.conf:/etc/nginx/nginx.conf:rw
+#      - /var/www/html:/var/www/html:ro
+#      - ./virtualhost/:/etc/nginx/conf.d/:ro
+#      - ./:/usr/share/nginx/html/:ro
+    environment:
+    - NGINX_HOST=35.239.22.226
+    - NGINX_PORT=80
+    - NGINX_ENTRYPOINT_QUIET_LOGS=1
+    networks:
+    - network1
+
+networks:
+  network1:
+    external: true
+    name: trafico
