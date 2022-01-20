@@ -14,7 +14,10 @@ services:
       - mariadb_data:/var/lib/mysql
   nginx:
     user: root
-    image: registry.digitalocean.com/butchershop/nginx-build:1.21.5.1-alpine
+    #image: registry.digitalocean.com/butchershop/nginx-build:1.21.5.1-alpine
+    build:  
+      dockerfile: Dockerfile
+      context: ./Compilaciones/nginx-1.21.5/
     restart: always
     container_name: nginx
     ports:
@@ -25,7 +28,10 @@ services:
       - php_1
   php_1:
     user: root
-    image: registry.digitalocean.com/butchershop/php-build:7.4.27.1-fqm
+    #image: registry.digitalocean.com/butchershop/php-build:7.4.27.1-fqm
+    build:  
+      dockerfile: Dockerfile
+      context: ./Compilaciones/php-7.4.27-fpm/
     restart: always
     container_name: php_docker
     expose:
