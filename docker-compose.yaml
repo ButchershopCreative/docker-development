@@ -14,7 +14,7 @@ services:
       - mariadb_data:/var/lib/mysql
       - ./:/mnt/project:rw
   nginx:
-    user: root
+    user: nginx
     image: nginx-build:1.21.5.1-alpine
     restart: always
     container_name: nginx
@@ -25,7 +25,7 @@ services:
     depends_on:
       - php_1
   php_1:
-    user: root
+    user: www-data
     image: php-build:8.1.1-1-fqm
     restart: always
     container_name: php_docker

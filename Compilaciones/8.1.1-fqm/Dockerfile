@@ -13,13 +13,21 @@ RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 RUN mv composer.phar /usr/local/bin/composer
 
-#Cleaning container
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
 COPY ./php.ini /usr/local/etc/php/php.ini
 
+RUN apt update && apt upgrade -y
+
+RUN apt install -y autoconf libcurl4-openssl-dev pkg-config libssl-dev libzip-dev htop nano curl zip cron \
+                            sendmail libmcrypt-dev mcrypt supervisor
+
+RUN echo "sendmail_path=/usr/sbin/sendmail -t -i" >> /usr/local/etc/php/conf.d/sendmail.ini
+RUN echo "localhost localhost.localdomain" >> /etc/hosts
+RUN touch /etc/supervisord.conf
+#RUN chmod 775 /etc/supervisord.conf
+
+RUN chown www-data:www-data /var/www/html/
 RUN chmod 777 /var/www/html/
 
 EXPOSE 9000
 
-USER root
+USER www-data
