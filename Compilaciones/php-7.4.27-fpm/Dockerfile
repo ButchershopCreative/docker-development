@@ -7,8 +7,8 @@ RUN apt install -y autoconf libcurl4-openssl-dev pkg-config libssl-dev libzip-de
 
 #RUN apt install -y supervisor
 
-RUN echo "sendmail_path=/usr/sbin/sendmail -t -i" >> /usr/local/etc/php/conf.d/sendmail.ini
-RUN echo "localhost localhost.localdomain" >> /etc/hosts
+#RUN echo "sendmail_path=/usr/sbin/sendmail -t -i" >> /usr/local/etc/php/conf.d/sendmail.ini
+#RUN echo "localhost localhost.localdomain" >> /etc/hosts
 #RUN touch /etc/supervisord.conf
 #RUN chmod 775 /etc/supervisord.conf
 
