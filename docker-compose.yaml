@@ -12,6 +12,7 @@ services:
       - 3306:3306
     volumes:
       - mariadb_data:/var/lib/mysql
+      - ./:/mnt/project:rw
   nginx:
     user: root
     image: nginx-build:1.21.5.1-alpine
@@ -25,7 +26,7 @@ services:
       - php_1
   php_1:
     user: root
-    image: php-build:7.4.27.1-fqm
+    image: php-build:7.4.27.1-fpm
     restart: always
     container_name: php_docker
     expose:
