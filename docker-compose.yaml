@@ -26,7 +26,7 @@ services:
       - php_1
   php_1:
     user: root
-    image: php-build:7.4.27.1-fpm
+    image: php-build:8.1.1-1-fqm
     restart: always
     container_name: php_docker
     expose:
