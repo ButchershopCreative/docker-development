@@ -1,0 +1,8 @@
+FROM phpmyadmin:5.1.1 as build
+
+ENV PMA_ARBITRARY 1
+ENV PMA_HOST mariadb
+ENV MYSQL_ROOT_PASSWORD butchershopdev
+ENV PMA_USER developer
+ENV PMA_PASSWORD developer
+ENV UPLOAD_LIMIT 512000
