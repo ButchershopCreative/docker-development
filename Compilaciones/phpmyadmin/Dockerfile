@@ -1,0 +1,5 @@
+FROM phpmyadmin:5.1.1 as build
+
+ENV PMA_ARBITRARY 1
+ENV PMA_HOST mariadb
+ENV UPLOAD_LIMIT 512000
