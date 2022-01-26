@@ -24,7 +24,13 @@ RUN echo "sendmail_path=/usr/sbin/sendmail -t -i" >> /usr/local/etc/php/conf.d/s
 RUN echo "localhost localhost.localdomain" >> /etc/hosts
 RUN touch /etc/supervisord.conf
 #RUN chmod 775 /etc/supervisord.conf
-
+#NPM
+RUN apt-get update -y && \
+    apt-get upgrade -y && \
+    apt-get install -y && \
+    curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
+    apt-get install -y nodejs
+    
 RUN chown www-data:www-data /var/www/html/
 RUN chmod 777 /var/www/html/
 

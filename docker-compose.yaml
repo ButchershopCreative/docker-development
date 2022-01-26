@@ -1,9 +1,16 @@
 version: "3.4"
 services:
   mariadb_1:
-    image: mariadb-build:10.7.1-1
+    image: registry.digitalocean.com/butchershop/mariadb-build:10.7.1-1
+    #build:  
+    #  dockerfile: Dockerfile
+    #  context: ./Compilaciones/mariadb/
     restart: always
     container_name: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD
+      - MARIADB_USER
+      - MARIADB_PASSWORD
     ports:
       - 3306:3306
     volumes:
@@ -36,10 +43,16 @@ services:
     volumes:
       - ./:/var/www/html/:rw
   phpmyadmin:
-    image: phpmyadmin-build:5.1.1
+    image: registry.digitalocean.com/butchershop/phpmyadmin-build:5.1.1
+    #build:  
+    #  dockerfile: Dockerfile
+    #  context: ./Compilaciones/phpmyadmin/
     labels:
       description: "MariaDB"
     restart: always
+    environment:
+      - PMA_USER
+      - PMA_PASSWORD
     ports:
       - 8088:80
     container_name: phpmyadmin
