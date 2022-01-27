@@ -17,7 +17,7 @@ services:
       - mariadb_data:/var/lib/mysql
       - ./:/mnt/project/:rw
   nginx:
-    user: nginx
+    user: root
     image: registry.digitalocean.com/butchershop/nginx-build:1.21.5.1-alpine
     #build:  
     #  dockerfile: Dockerfile
@@ -31,7 +31,7 @@ services:
     depends_on:
       - php_1
   php_1:
-    user: www-data
+    user: root
     image: registry.digitalocean.com/butchershop/php-build:8.1.1-1-fqm
     #build:  
     #  dockerfile: Dockerfile
