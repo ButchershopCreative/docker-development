@@ -21,13 +21,17 @@ RUN apt install -y autoconf libcurl4-openssl-dev pkg-config libssl-dev libzip-de
                             sendmail libmcrypt-dev mcrypt supervisor
 
 RUN echo "sendmail_path=/usr/sbin/sendmail -t -i" >> /usr/local/etc/php/conf.d/sendmail.ini
-RUN echo "localhost localhost.localdomain" >> /etc/hosts
+RUN echo "127.0.0.1 localhost" >> /etc/hosts
+RUN echo "127.0.0.1 localhost.localdomain" >> /etc/hosts
+
 RUN touch /etc/supervisord.conf
-#RUN chmod 775 /etc/supervisord.conf
+RUN chown www-data:www-data /etc/supervisord.conf
+RUN chmod 775 /etc/supervisord.conf
+
+RUN apt autoremove -y && apt autoclean -y
 
 RUN chown www-data:www-data /var/www/html/
 RUN chmod 777 /var/www/html/
 
-EXPOSE 9000
-
 USER www-data
+EXPOSE 9000
