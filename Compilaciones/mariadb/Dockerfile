@@ -1,4 +1,4 @@
-FROM mariadb:10.7.1 as build
+FROM mariadb:x as build
 USER root
 
 ENV MYSQL_ROOT_PASSWORD butchershopdev

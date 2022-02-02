@@ -1,8 +1,6 @@
 USE mysql;
 
-CREATE DATABASE statamic_dev;
-CREATE DATABASE statamic_stage;
-CREATE DATABASE statamic_prod;
+CREATE DATABASE database_dev;
 
 GRANT ALL PRIVILEGES ON *.* TO 'developer'@'%';
 

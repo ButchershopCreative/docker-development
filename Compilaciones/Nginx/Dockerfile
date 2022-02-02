@@ -1,22 +1,27 @@
-FROM nginx:1.21.5 as build-stage
+FROM nginx:x as build-stage
 USER root
+
+ARG WORKSPACE
 
 #import mime types and custom configs
 COPY ./mime.types /etc/nginx/mime.types
-
 COPY ./nginx.conf /etc/nginx/nginx.conf
 
-COPY ./default.conf /etc/nginx/conf.d/default.conf
+#import virtualhost for differents codes {laravel-statamic-wordpress}
+COPY ./virtualhost.conf /tmp/virtualhost.conf
+COPY ./40-setup-folder-files-permissions.sh /tmp/
+COPY ./virtualhost.sh /tmp/
 
-COPY ./40-setup-profile-permissions.sh /docker-entrypoint.d/
+RUN chmod u+x /tmp/virtualhost.sh && ./tmp/virtualhost.sh $WORKSPACE
 
-FROM nginx:1.21.5-alpine
+FROM nginx:x-alpine
 
 COPY --from=build-stage /etc/nginx/mime.types /etc/nginx/mime.types
 COPY --from=build-stage /etc/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-stage /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-stage /usr/lib/nginx/modules /usr/lib/nginx/modules
 COPY --from=build-stage /etc/nginx/modules /etc/nginx/modules
+COPY --from=build-stage /docker-entrypoint.d /docker-entrypoint.d
 
 RUN mkdir -p /var/cache/nginx/client_temp
 RUN chown nginx:nginx /var/cache/nginx/client_temp

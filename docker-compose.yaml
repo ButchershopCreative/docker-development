@@ -1,7 +1,7 @@
 version: "3.4"
 services:
   mariadb_1:
-    image: mariadb-build:10.7.1-1
+    image: mariadb-build:x
     #image: registry.digitalocean.com/butchershop/mariadb-build:10.7.1-1
     #build:  
     #  dockerfile: Dockerfile
@@ -15,7 +15,7 @@ services:
       - ./:/mnt/project/:rw
   nginx:
     user: root
-    image: nginx-build:1.21.5.1-alpine
+    image: nginx-build:x-alpine
     #image: registry.digitalocean.com/butchershop/nginx-build:1.21.5.1-alpine
     #build:  
     #  dockerfile: Dockerfile
