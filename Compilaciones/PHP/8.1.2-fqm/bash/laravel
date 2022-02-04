@@ -1,0 +1,9 @@
+#!/bin/bash -x
+
+cd /var/www/html/
+
+composer install
+npm install
+npm run watch
+
+echo "Laravel environment was selected..."

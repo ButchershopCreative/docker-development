@@ -1,0 +1,12 @@
+#!/bin/bash -x
+
+cd /var/www/html/
+
+composer install
+php please auth:migration
+php artisan migrate
+
+npm install
+npm run watch
+
+echo "Statamic environment was selected..."

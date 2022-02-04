@@ -1,24 +1,23 @@
-FROM nginx:x as build-stage
+FROM nginx:1.21.5 as build-stage
 USER root
-
-ARG WORKSPACE
 
 #import mime types and custom configs
 COPY ./mime.types /etc/nginx/mime.types
 COPY ./nginx.conf /etc/nginx/nginx.conf
 
 #import virtualhost for differents codes {laravel-statamic-wordpress}
-COPY ./virtualhost.conf /tmp/virtualhost.conf
+COPY ./virtualhost.conf /etc/nginx/conf.d/default.conf
 COPY ./40-setup-folder-files-permissions.sh /tmp/
 COPY ./virtualhost.sh /tmp/
 
-RUN chmod u+x /tmp/virtualhost.sh && ./tmp/virtualhost.sh $WORKSPACE
+RUN chmod u+x /tmp/virtualhost.sh && ./tmp/virtualhost.sh
 
-FROM nginx:x-alpine
+FROM nginx:1.21.5-alpine
 
 COPY --from=build-stage /etc/nginx/mime.types /etc/nginx/mime.types
 COPY --from=build-stage /etc/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-stage /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=build-stage /etc/nginx/conf.d/default.conf /opt/default.conf
 COPY --from=build-stage /usr/lib/nginx/modules /usr/lib/nginx/modules
 COPY --from=build-stage /etc/nginx/modules /etc/nginx/modules
 COPY --from=build-stage /docker-entrypoint.d /docker-entrypoint.d
@@ -59,5 +58,11 @@ RUN mkdir -p /var/www/html/
 RUN chown nginx:nginx /var/www/html/
 RUN chmod 777 /var/www/html/
 
-WORKDIR /var/www/html/
+
+RUN apk add bash
+
+COPY ./bash/ /usr/bin/
+RUN chmod +x /usr/bin/dev /usr/bin/laravel /usr/bin/statamic /usr/bin/wordpress
+
 USER nginx
+WORKDIR /var/www/html/

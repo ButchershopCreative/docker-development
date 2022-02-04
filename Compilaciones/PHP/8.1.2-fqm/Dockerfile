@@ -1,24 +1,43 @@
-FROM php:8.1.2-fpm as build-stage
+FROM composer:2.2.5 as composerX
+FROM node:17.4.0 as nodeX
+FROM mlocati/php-extension-installer:1.4.14 as php_extensioner
 
+FROM php:8.1.2-fpm as build-stage
 USER root
 
-COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+#INSTALLING ENVIRONMENT FUNCTION
+RUN apt update
+RUN apt install -y autoconf libcurl4-openssl-dev pkg-config libssl-dev libzip-dev htop nano curl zip unzip cron \
+                            sendmail libmcrypt-dev mcrypt apt-utils supervisor
 
-RUN install-php-extensions curl redis mbstring mysqli pdo_mysql
+#INSTALLING PHP EXTENSIONS
+COPY --from=php_extensioner /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions redis mysqli pdo_mysql xdebug
+RUN docker-php-ext-enable xdebug
 
-#composer 2
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php -r "if (hash_file('sha384', 'composer-setup.php') === '906a84df04cea2aa72f40b5f787e49f22d4c2f19492ac310e8cba5b96ac8b64115ac402c8cd292b8a03482574915d1a8') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-RUN php composer-setup.php
-RUN php -r "unlink('composer-setup.php');"
-RUN mv composer.phar /usr/local/bin/composer
+RUN apt autoremove -y && apt autoclean -y
 
-COPY ./php.ini /usr/local/etc/php/php.ini
+#GET COMPOSER
+COPY --from=composerX /usr/bin/composer /usr/bin/composer
 
-RUN apt update && apt upgrade -y
+#GET NODE
+COPY --from=nodeX /usr/local/lib/node_modules /usr/local/lib/node_modules
+COPY --from=nodeX /opt/yarn-v1.22.17/ /opt/yarn-v1.22.17/
+COPY --from=nodeX /usr/local/bin/ /usr/local/bin/
 
-RUN apt install -y autoconf libcurl4-openssl-dev pkg-config libssl-dev libzip-dev htop nano curl zip cron \
-                            sendmail libmcrypt-dev mcrypt supervisor
+#SETTING PHP.INI
+COPY ./custom_php.sh /opt/
+RUN sh /opt/custom_php.sh
+
+#SET ENVIRONMENTS CHANGE OPTIONS
+COPY ./bash/ /usr/bin/
+RUN chmod +x /usr/bin/dev /usr/bin/laravel /usr/bin/statamic /usr/bin/wordpress
+
+RUN adduser www-data root
+RUN adduser www-data bin
+
+RUN chown www-data:www-data /var/www/ /var/www/html/
+RUN chmod 775 /var/www/html/
 
 RUN echo "sendmail_path=/usr/sbin/sendmail -t -i" >> /usr/local/etc/php/conf.d/sendmail.ini
 RUN echo "127.0.0.1 localhost" >> /etc/hosts
@@ -28,10 +47,6 @@ RUN touch /etc/supervisord.conf
 RUN chown www-data:www-data /etc/supervisord.conf
 RUN chmod 775 /etc/supervisord.conf
 
-RUN apt autoremove -y && apt autoclean -y
-
-RUN chown www-data:www-data /var/www/html/
-RUN chmod 775 /var/www/html/
-
 USER www-data
+WORKDIR /var/www/html
 EXPOSE 9000

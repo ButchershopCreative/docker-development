@@ -1,0 +1,3 @@
+#!/bin/bash -x
+mysql -u root -pbutchershopdev -e "DROP DATABASE IF EXISTS statamic_dev;"
+mysql -u root -pbutchershopdev -e "CREATE DATABASE statamic_dev;"

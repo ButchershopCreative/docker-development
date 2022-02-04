@@ -1,0 +1,2 @@
+#!/bin/bash -x
+echo "Default environment was selected..."

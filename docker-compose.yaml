@@ -15,7 +15,7 @@ services:
       - ./:/mnt/project/:rw
   nginx:
     user: root
-    image: nginx-build:x-alpine
+    image: nginx-build:1.21.5.1-alpine
     #image: registry.digitalocean.com/butchershop/nginx-build:1.21.5.1-alpine
     #build:  
     #  dockerfile: Dockerfile
@@ -27,11 +27,11 @@ services:
     volumes:
       - ./:/var/www/html/:rw
     depends_on:
-      - php_1
-  php_1:
+      - php
+  php:
     user: root
-    image: php-build:8.1.1-1-fqm
-    #image: registry.digitalocean.com/butchershop/php-build:8.1.1-1-fqm
+    image: php-build:8.1.2-x1-fqm
+    #image: registry.digitalocean.com/butchershop/php-build:8.1.2-1-fqm
     #build:  
     #  dockerfile: Dockerfile
     #  context: ./Compilaciones/8.1.1-fqm/
@@ -39,6 +39,8 @@ services:
     container_name: php_docker
     expose:
       - 9000
+    ports:
+      - 9003:9003
     volumes:
       - ./:/var/www/html/:rw
   phpmyadmin:
@@ -58,7 +60,7 @@ services:
     container_name: phpmyadmin
     depends_on:
       - mariadb_1
-  redis_1:
+  redis:
     image: redis:6.2.6
     container_name: redis
     restart: always
