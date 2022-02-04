@@ -12,8 +12,7 @@ RUN apt install -y autoconf libcurl4-openssl-dev pkg-config libssl-dev libzip-de
 
 #INSTALLING PHP EXTENSIONS
 COPY --from=php_extensioner /usr/bin/install-php-extensions /usr/local/bin/
-RUN install-php-extensions redis mysqli pdo_mysql xdebug
-RUN docker-php-ext-enable xdebug
+RUN install-php-extensions redis mysqli pdo_mysql xdebug gd
 
 RUN apt autoremove -y && apt autoclean -y
 
