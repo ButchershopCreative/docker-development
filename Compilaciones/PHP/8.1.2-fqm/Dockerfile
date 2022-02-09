@@ -6,45 +6,43 @@ FROM php:8.1.2-fpm as build-stage
 USER root
 
 #INSTALLING ENVIRONMENT FUNCTION
-RUN apt update
-RUN apt install -y autoconf libcurl4-openssl-dev pkg-config libssl-dev libzip-dev htop nano curl zip unzip cron \
-                            sendmail libmcrypt-dev mcrypt apt-utils supervisor
+RUN apt update && apt install -y autoconf apt-utils pkg-config libssl-dev libzip-dev libmcrypt-dev mcrypt \
+                            sendmail htop nano curl zip unzip cron supervisor ncdu
 
 #INSTALLING PHP EXTENSIONS
-COPY --from=php_extensioner /usr/bin/install-php-extensions /usr/local/bin/
-RUN install-php-extensions redis mysqli pdo_mysql xdebug gd
-
-RUN apt autoremove -y && apt autoclean -y
+COPY --from=php_extensioner /usr/bin/install-php-extensions /usr/bin/
+RUN install-php-extensions redis mysqli pdo_mysql
 
 #GET COMPOSER
-COPY --from=composerX /usr/bin/composer /usr/bin/composer
+COPY --from=composerX /usr/bin/composer /usr/local/bin/composer
 
 #GET NODE
 COPY --from=nodeX /usr/local/lib/node_modules /usr/local/lib/node_modules
 COPY --from=nodeX /opt/yarn-v1.22.17/ /opt/yarn-v1.22.17/
 COPY --from=nodeX /usr/local/bin/ /usr/local/bin/
+RUN npm install -g npm@8.4.1
 
 #SETTING PHP.INI
 COPY ./custom_php.sh /opt/
-RUN sh /opt/custom_php.sh
+RUN chmod +x /opt/custom_php.sh
+RUN bash /opt/custom_php.sh 1
 
 #SET ENVIRONMENTS CHANGE OPTIONS
-COPY ./bash/ /usr/bin/
-RUN chmod +x /usr/bin/dev /usr/bin/laravel /usr/bin/statamic /usr/bin/wordpress
+COPY ./bash/ /usr/local/bin/
+RUN chmod +x /usr/local/bin/dev /usr/local/bin/laravel /usr/local/bin/statamic /usr/local/bin/wordpress
 
 RUN adduser www-data root
 RUN adduser www-data bin
-
-RUN chown www-data:www-data /var/www/ /var/www/html/
-RUN chmod 775 /var/www/html/
-
-RUN echo "sendmail_path=/usr/sbin/sendmail -t -i" >> /usr/local/etc/php/conf.d/sendmail.ini
-RUN echo "127.0.0.1 localhost" >> /etc/hosts
-RUN echo "127.0.0.1 localhost.localdomain" >> /etc/hosts
+RUN adduser www-data crontab
 
 RUN touch /etc/supervisord.conf
-RUN chown www-data:www-data /etc/supervisord.conf
-RUN chmod 775 /etc/supervisord.conf
+RUN chown -R www-data:www-data /var/www/ /var/www/html/ /etc/supervisord.conf
+RUN chmod 775 /var/www/ /var/www/html/ /etc/supervisord.conf
+
+RUN install-php-extensions xdebug gd
+RUN bash /opt/custom_php.sh 2
+
+RUN apt autoremove -y && apt autoclean -y
 
 USER www-data
 WORKDIR /var/www/html

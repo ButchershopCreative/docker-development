@@ -1,2 +1,7 @@
 #!/bin/bash -x
+
+composer global require laravel/installer require statamic/cli
+
+
+
 echo "Default environment was selected..."

@@ -1,12 +1,24 @@
 #!/bin/bash -x
-
-cd /var/www/html/
-
-composer install
-php please auth:migration
-php artisan migrate
-
-npm install
-npm run watch
-
-echo "Statamic environment was selected..."
+if [ $1 ]
+then
+    case $1 in
+    'permissions')
+       bash /opt/custom_php.sh $1
+    ;;
+    *)
+        echo "Hi there!!!"
+    ;;
+    esac
+else
+    cd /var/www/html/
+    composer install
+    php -r "file_exists('.env') || copy('.env.example', '.env');"
+    php artisan key:generate
+    php artisan db:wipe
+    php please auth:migration
+    php artisan migrate
+    npm install
+    npm run dev
+    bash /opt/custom_php.sh 2
+    echo "Statamic Environment has been selected..."
+fi

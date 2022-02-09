@@ -2,8 +2,15 @@
 
 cd /var/www/html/
 
-composer install
 npm install
-npm run watch
+npm run dev
 
-echo "Laravel environment was selected..."
+composer install
+php artisan key:generate
+php artisan migrate
+
+php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+bash /opt/custom_php.sh 2
+
+echo "Laravel Environment has been selected..."
