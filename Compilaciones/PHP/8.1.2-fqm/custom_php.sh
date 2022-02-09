@@ -16,9 +16,10 @@ case $1 in
     sed -i 's!;sendmail_path =!sendmail_path=/usr/sbin/sendmail -t -i!' /usr/local/etc/php/php.ini 2>&1
     echo "End php.ini customization..."
 
-    echo "127.0.0.1 localhost" >> /etc/hosts
-    echo "127.0.0.1 localhost.localdomain" >> /etc/hosts
-    echo "End docker hosts customization..."
+    #echo "#[Customized hosts]" >> /etc/hosts
+    #echo "127.0.0.1 localhost" >> /etc/hosts
+    #echo "127.0.0.1 localhost.localdomain" >> /etc/hosts
+    #echo "End docker hosts customization..."
   ;;
   '2')
     echo "xdebug.mode=develop,debug,coverage,gcstats" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini 2>&1

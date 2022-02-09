@@ -15,7 +15,7 @@ RUN apt update && apt install -y autoconf apt-utils pkg-config libssl-dev libzip
 
 #INSTALLING PHP EXTENSIONS
 COPY --from=php_extensioner /usr/bin/install-php-extensions /usr/bin/
-RUN install-php-extensions redis-5.3.6 mysqli pdo_mysql opcache mcrypt-1.0.4
+RUN install-php-extensions redis-5.3.6 mysqli pdo_mysql mcrypt-1.0.4
 
 #GET COMPOSER
 COPY --from=composerX /usr/bin/composer /usr/local/bin/composer

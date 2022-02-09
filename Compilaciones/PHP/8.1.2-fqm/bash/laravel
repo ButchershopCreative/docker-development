@@ -1,16 +1,23 @@
 #!/bin/bash -x
-
-cd /var/www/html/
-
-npm install
-npm run dev
-
-composer install
-php artisan key:generate
-php artisan migrate
-
-php -r "file_exists('.env') || copy('.env.example', '.env');"
-
-bash /opt/custom_php.sh 2
-
-echo "Laravel Environment has been selected..."
+if [ $1 ]
+then
+    case $1 in
+    'permissions')
+       bash /opt/custom_php.sh $1
+    ;;
+    *)
+        echo "Hi there!!!"
+    ;;
+    esac
+else
+    cd /var/www/html/
+    composer install
+    php -r "file_exists('.env') || copy('.env.example', '.env');"
+    php artisan key:generate
+    php artisan db:wipe
+    php artisan migrate
+    npm install
+    npm run dev
+    bash /opt/custom_php.sh 2
+    echo "Statamic Environment has been selected..."
+fi

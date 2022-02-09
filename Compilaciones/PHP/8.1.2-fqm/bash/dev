@@ -2,6 +2,18 @@
 
 composer global require laravel/installer require statamic/cli
 
-
-
-echo "Default environment was selected..."
+#!/bin/bash -x
+if [ $1 ]
+then
+    case $1 in
+    'permissions')
+       bash /opt/custom_php.sh $1
+    ;;
+    *)
+        echo "Hi there!!!"
+    ;;
+    esac
+else    
+    bash /opt/custom_php.sh 2
+    echo "Default Dev Environment has been selected..."
+fi
