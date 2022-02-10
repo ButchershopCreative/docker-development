@@ -11,14 +11,33 @@ then
     esac
 else
     cd /var/www/html/
-    composer install
-    php -r "file_exists('.env') || copy('.env.example', '.env');"
-    php artisan key:generate
-    php artisan db:wipe
-    php please auth:migration
-    php artisan migrate
-    npm install
-    npm run dev
+
+    if [[ -f ".env.example" ]]; then
+        php -r "file_exists('.env') || copy('.env.example', '.env');"
+        php artisan key:generate
+
+        if [[ -f "composer.json" ]]; then
+            composer install
+            composer require daynnnnn/statamic-database
+
+            php artisan db:wipe
+            php please auth:migration
+            php please migrate
+            php please make:user --super
+        else
+            echo "no composer.json file was found..."
+        fi
+
+        if [[ -f "package.json" && -f "webpack.mix.js" ]]; then
+            npm install
+            npm run dev
+        else
+            echo "no package.json file was found..."
+        fi
+    else
+        echo "no .env.example file was found..."
+    fi
+
     bash /opt/custom_php.sh 2
     echo "Statamic Environment has been selected..."
 fi
