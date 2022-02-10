@@ -1,0 +1,17 @@
+#!/bin/bash -x
+
+#!/bin/bash -x
+if [ $1 ]
+then
+    case $1 in
+    'permissions')
+       bash /opt/custom_php.sh $1
+    ;;
+    *)
+        echo "Hi there!!!"
+    ;;
+    esac
+else    
+    bash /opt/custom_php.sh 2
+    echo "Wordpress Environment has been selected..."
+fi

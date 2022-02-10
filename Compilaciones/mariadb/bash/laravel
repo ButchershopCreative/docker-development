@@ -1,0 +1,3 @@
+#!/bin/bash -x
+mysql -u root -pbutchershopdev -e "DROP DATABASE IF EXISTS laravel_dev;"
+mysql -u root -pbutchershopdev -e "CREATE DATABASE laravel_dev;"

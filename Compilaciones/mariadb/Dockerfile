@@ -5,6 +5,7 @@ ENV MYSQL_ROOT_PASSWORD butchershopdev
 ENV MARIADB_USER developer
 ENV MARIADB_PASSWORD developer
 
+COPY ./bash/ /usr/bin/
 COPY ./scripts/ /docker-entrypoint-initdb.d/
 
 USER mysql

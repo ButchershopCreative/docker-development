@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9a68ff4d08596d4259cf9caf6bfd6f17",
+    "content-hash": "c0845c42b8af3b5886fbc6e153286d84",
     "packages": [
         {
             "name": "ajthinking/archetype",
@@ -729,6 +729,52 @@
                 }
             ],
             "time": "2022-01-04T17:06:45+00:00"
+        },
+        {
+            "name": "daynnnnn/statamic-database",
+            "version": "v1.5.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Daynnnnn/statamic-database.git",
+                "reference": "047298447da78f5d0571458966d9fd09ef3d2924"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Daynnnnn/statamic-database/zipball/047298447da78f5d0571458966d9fd09ef3d2924",
+                "reference": "047298447da78f5d0571458966d9fd09ef3d2924",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "^3.1",
+                "statamic/cms": "^3.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^0.12.89"
+            },
+            "type": "library",
+            "extra": {
+                "statamic": {
+                    "name": "Statamic Database Driver",
+                    "description": "Allows you to store all Statamic data in a database."
+                },
+                "laravel": {
+                    "providers": [
+                        "Daynnnnn\\StatamicDatabase\\StatamicDatabaseServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Daynnnnn\\StatamicDatabase\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Allows you to store all Statamic data in a database.",
+            "support": {
+                "issues": "https://github.com/Daynnnnn/statamic-database/issues",
+                "source": "https://github.com/Daynnnnn/statamic-database/tree/v1.5.1"
+            },
+            "time": "2021-11-21T13:28:40+00:00"
         },
         {
             "name": "doctrine/cache",
